@@ -1,0 +1,12 @@
+celular
+carro
+planeta
+televisão
+espelho
+casa
+computador
+cadeira
+cidade
+Brasil
+google
+windows
