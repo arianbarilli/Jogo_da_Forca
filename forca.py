@@ -1,244 +1,203 @@
-import random
-import os
 import unicodedata
-import time
-os.system("cls")
+from funcoes import limpa_Tela,desenha_forca,desenho_final,dormir,carregando,sonhador
+limpa_Tela()
 print('====================================================   ')
 print('========== BEM VINDO(A) AO JOGO DA FORCA! ==========   ')
 print('====================================================   ')
 print("                     *\(^o^)/*                       \n")
 
-print("======================Iniciando======================")
-time.sleep(1)
+print("Iniciando...")
+dormir()
 
-print("======================Carregando======================")
-contagem = 0
-
-if contagem == 0 :
-    print("█▒▒▒▒▒▒▒▒▒\n 10%")
-    time.sleep(2)
-    os.system("cls")
-    contagem = contagem + 1
-
-if contagem == 1 :
-    print("███▒▒▒▒▒▒▒\n 30%")
-    time.sleep(1)
-    os.system("cls")
-    contagem = contagem + 1
-    
-if contagem == 2 :
-    print("█████▒▒▒▒▒\n 50%")
-    time.sleep(1)
-    os.system("cls")
-    contagem = contagem + 1
-
-if contagem == 3 :
-    print("███████▒▒▒\n 100%")
-    time.sleep(1)
-    os.system("cls")
-    contagem = contagem + 1
-
-palavra = []
-def carrega_palavras():
-    arquivo = open("palavras.txt", "r", encoding = "utf-8")
-    for pSecreta in arquivo.readlines():
-        pSecreta = pSecreta.strip().lower()
-        if pSecreta != "":
-            palavra.append(pSecreta)
-    arquivo.close()
-carrega_palavras()
-
-pSecreta = palavra[random.randint(0, len(palavra)-1)]
-tentativas = []
 alfabeto = list("abcçdefghijklmnopqrstuvwxyzáàãâéèêíìîóòôõúùû")
 maiusculas = list("ABCÇDEFGHIJKLMNOPQRSTUVWXYZÁÀÂÃÊÉÈÍÌÎÓÒÔÕÚÙÛ")
-chances = 6
+vitoria = False
+chances = 5
+carregamento = 0
 
-def remove_acento(string: str) -> str:
-    normalized = unicodedata.normalize('NFD', string)
-    return normalized.encode('ascii', 'ignore').decode('utf8')
+if carregamento == 0:
+    carregando()
+    carregamento = carregamento + 1
 
 while True:
-
-    letras = str(input("Digite uma letra minúscula ou 'exit' para sair: ")) 
-    os.system("cls")
-
-    if letras == "exit":
-        break
-
-    elif letras in tentativas:
-        print("Você já digitou essa letra, tente outra ")
-        continue
+    print("\n(1) Jogar")
+    print("(2) Sair")
+    comando = str(input("-> "))
     
-    elif len(letras)>1 and letras != pSecreta:
-        print("Só é possivel digitar uma letra, ou você digitou a palavra errada, verifique a escrita e acentuação ")
-        continue
+    if comando == "1":
+        limpa_Tela()
+        desafiante = input("\nInsira o nome do desafiante: ")
+        limpa_Tela()  
+        competidor = input("\nInsira o nome do competidor: ")
+        limpa_Tela()
+        pSecreta = str(input("Informe a palavra Secreta: "))
 
-    elif letras in maiusculas:
-        print("Digite Apenas letras minúsculas")
-        continue
 
-    elif letras not in alfabeto and letras not in pSecreta:
-        print(f'ERRO, vovê digitou " {letras} " isso não é uma letra, tente novamente ')
-        continue
+        limpa_Tela()
+        dicaA = input("Informe a Dica 1: ")
+        limpa_Tela()
+        dicaB = input("Informe a Dica 2: ")
+        limpa_Tela()
+        dicaC = input("Informe a Dica 3: ")
+        limpa_Tela()
 
-    tentativas.append(letras)
+        dicas = [dicaA, dicaB, dicaC]
+        dicasPedidas = 0
 
-    sem_acento = remove_acento(pSecreta)
+        tentativas = []
 
-    verificacao = ''
-    for posicao, letra_secreta in enumerate(sem_acento):
-        if letra_secreta in tentativas:
-            verificacao += pSecreta[posicao] 
-        else:
-            verificacao += '*' 
-
-    if letras in pSecreta:
-        print(f'A palavra secreta contem " {letras} " ')
-
-    elif letras not in sem_acento:
-        chances -= 1
-        print(f'A palavra secreta não contem " {letras} " ou você digitou ela errada ')
-       
-    print(f'Você tem {chances} chances')
-    print(f'Palavra secreta = {verificacao} ')
-    
-    if chances == 6:
-        print()
-        print("|----- ")
-        print("|    |    ")
-        print("|         ")
-        print("|         ")
-        print("|         ")
-        print("|         ")
-        print("_         ")
-        print()
+        def remove_acento(string: str) -> str:
+            normalized = unicodedata.normalize('NFD', string)
+            return normalized.encode('ascii', 'ignore').decode('utf8')
+        
+        while True:
+            print("(1) Dica")
+            print("(2) Sair\n")
+            letras = str(input('Digite uma letra: ')) 
+            limpa_Tela()
+            try:
             
-    elif chances == 5:
-        print()
-        print("|-----     ")
-        print("|    |     ")
-        print("|    O     ")
-        print("|          ")
-        print("|          ")
-        print("|          ")
-        print("|           ")
-        print("_          ")
-        print()
-            
-    elif chances == 4:
-        print()
-        print("|-----     ")
-        print("|    |     ")
-        print("|    O     ")
-        print("|    |     ")
-        print("|    |     ")
-        print("|          ")
-        print("|           ")
-        print("_          ")
-        print()
-            
-    elif chances == 3:
-        print()
-        print("|-----     ")
-        print("|    |     ")
-        print("|    O     ")
-        print("|   /|     ")
-        print("|    |     ")
-        print("|          ")
-        print("|           ")
-        print("_          ")
-        print()
-            
-    elif chances == 2:
-        print()
-        print("|-----      ")
-        print("|    |      ")
-        print("|    O      ")
-        print("|   /|\     ")
-        print("|    |      ")
-        print("|           ")
-        print("|           ")
-        print("_           ")
-        print()
-            
-    elif chances == 1:
-        print()
-        print("|-----      ")
-        print("|    |      ")
-        print("|    O      ")
-        print("|   /|\     ")
-        print("|    |      ")
-        print("|   /       ")
-        print("|           ")
-        print("_           ")
-        print()
+                if letras == "1":
+                    if dicasPedidas < 3:
+                        print(f"Dica {dicasPedidas+1}: {dicas[dicasPedidas]}\n")
+                        dicasPedidas +=1
+                    else:
+                        print(f'Dica 1 = {dicaA}')
+                        print(f'Dica 2 = {dicaB}')
+                        print(f'Dica 3 = {dicaC}\n')
+                        print("Suas dicas acabaram, hora do chute \n")
+                    continue
 
-    if verificacao == pSecreta or letras == pSecreta:
-        os.system("cls")
-        print(f'A palavra secreta era: {pSecreta} \n ')
-        print("PARABÉNS, você venceu! \(^-^)/ ")
-        print("     ___________      ")
-        print("    '._==_==_=_.'     ")
-        print("    .-\:      /-.     ")
-        print("   | (|:.     |) |    ")
-        print("    '-|:.     |-'     ")
-        print("      \::.    /       ")
-        print("       '::. .'        ")
-        print("         ) (          ")
-        print("       _.' '._        ")
-        print('       """""""        ')
-        print()
-        print()
+                elif letras == "2":
+                    print("Saindo do jogo atual...")
+                    dormir()
+                    limpa_Tela()
+                    break
+            
+                elif letras in tentativas:
+                    print("Você já digitou essa letra, tente outra ")
+                    continue
+                    
+                elif len(letras)>1 and letras != pSecreta:
+                    print("Só é possivel digitar uma letra, ou você digitou a palavra errada, verifique a escrita e acentuação ")
+                    continue
+
+                elif letras in maiusculas:
+                    print("Digite Apenas letras minúsculas")
+                    continue
+
+                elif letras not in alfabeto and letras not in pSecreta:
+                    print(f'ERRO, vovê digitou " {letras} " isso não é uma letra, tente novamente ')
+                    continue
+
+                tentativas.append(letras)
+                sem_acento = remove_acento(pSecreta)
+
+                verificacao = ''
+                for posicao, letra_secreta in enumerate(sem_acento):
+                    if letra_secreta in tentativas:
+                        verificacao += pSecreta[posicao] 
+                    else:
+                        verificacao += '*' 
+
+                if letras in pSecreta:
+                    print(f'A palavra secreta contem " {letras} " ')
+
+                elif letras not in sem_acento:
+                    chances -= 1
+                    print(f'A palavra secreta não contem " {letras} " ')
+            
+                print(f'Você tem {chances} chances')
+                print(f'Palavra secreta = {verificacao} ')
+            
+                desenha_forca(chances)
+            except:
+                print("Por favor digite uma letra")
+
+            if verificacao == pSecreta or letras == pSecreta:
+
+                limpa_Tela()
+                ganhador = (f"A palavra era: {pSecreta} > Vencedor: Competidor {competidor}, Perdedor: Desafiante {desafiante}")
+                print(f"PARABÉNS, {competidor} você venceu! \(^-^)/ ")
+                print("     ___________      ")
+                print("    '._==_==_=_.'     ")
+                print("    .-\:      /-.     ")
+                print("   | (|:.     |) |    ")
+                print("    '-|:.     |-'     ")
+                print("      \::.    /       ")
+                print("       '::. .'        ")
+                print("         ) (          ")
+                print("       _.' '._        ")
+                print('       """""""        ')
+                print()
+                print(f"Mais sorte na proxima {desafiante}")
+                print()
+                try:
+                    print("\n")
+                    arquivo = open('arquivo.txt','a')
+                    arquivo.write(ganhador + "\n")
+                    arquivo.close()
+
+                    arquivo = open('arquivo.txt','r')
+                    
+                    print("Histórico de partidas:\n")
+                    for linha in arquivo:
+                        linha = linha.rstrip()
+                        print (linha)
+                    arquivo.close()
+                    sonhador()
+                   
+                except:
+                    arquivo = open('arquivo.txt','w')
+                    arquivo.close()
+                
+                break
+            
+            desenho_final(chances)
+
+            if chances == 0:
+                ganhador = (f"A palavra era: {pSecreta} > Vencedor: Desafiante {desafiante}, Perdedor: Competidor {competidor}")
+                print(f"Você foi enforcado {competidor} ¯\_('-')_/¯ ")
+                print()
+                print("|-----      ")
+                print("|    |      ")
+                print("|    |      ")
+                print("|    O      ")
+                print("|   /|\     ")
+                print("|    |      ")
+                print("|   / \     ")
+                print("|           ")
+                print("_           ")
+                print()
+                print(f"Mais sorte da próxima vez {competidor} ('-')")
+                print(f"Parabens {desafiante}")
+                print()
+                try:
+                    print("\n")
+                    arquivo = open('arquivo.txt','a')
+                    arquivo.write(ganhador + "\n")
+                    arquivo.close()
+
+                    arquivo = open('arquivo.txt','r')
+                    
+                    print("Histórico de partidas:\n")
+                    for linha in arquivo:
+                        linha = linha.rstrip()                            
+                        print (linha)
+                    arquivo.close()
+                    dormir()
+                    
+                except:
+                    arquivo = open('arquivo.txt','w')                        
+                    arquivo.close()
+                    
+                break
+        
+    elif(comando == "2"):
+        print("Saindo...")
+        dormir()
+        limpa_Tela()
         break
-
-    if chances == 0:
-        os.system("cls")
-        print(f'A palavra secreta era: {pSecreta} \n ')
-        print()
-        print("|-----      ")
-        print("|    O      ")
-        print("|   /|\     ")
-        print("|    |      ")
-        print("|   / \     ")
-        print("|           ")
-        print("_           ")
-        time.sleep(3)
-        os.system("cls")
-        print("|-----      ")
-        print("|    |      ")
-        print("|    O      ")
-        print("|   /|\     ")
-        print("|    |      ")
-        print("|   / \     ")
-        print("|           ")
-        print("_           ")
-        time.sleep(1)
-        os.system("cls")
-        print("|-----      ")
-        print("|    |      ")
-        print("|  \ O /    ")
-        print("|    |      ")
-        print("|    |      ")
-        print("|   / \     ")
-        print("|           ")
-        print("_           ")
-        time.sleep(1)
-        os.system("cls")
-        print("Você foi enforcado ¯\_('-')_/¯ ")
-        print("|-----      ")
-        print("|    |      ")
-        print("|    |      ")
-        print("|    O      ")
-        print("|   /|\     ")
-        print("|    |      ")
-        print("|   / \     ")
-        print("|           ")
-        print("_           ")
-        print()
-        print("Mais sorte da próxima vez ('-')")
-        print()
-        print()
-        time.sleep(2)
-        break
-    
+    else:
+        limpa_Tela()
+        print("Escolha uma das opcões")
